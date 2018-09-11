@@ -1,5 +1,5 @@
 function renderNode(node) {
-  
+
 }
 
 function render(reaktElement, domElement) {
@@ -7,4 +7,4 @@ function render(reaktElement, domElement) {
   domElement.appendChild(app);
 }
 
-export { render }
+export default { render }

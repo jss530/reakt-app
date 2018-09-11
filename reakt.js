@@ -7,7 +7,18 @@ if (typeof nodeName === 'function' &&
   /^class/.test(nodeName.toString()))
   {
   const component = new nodeName(props);
-  return renderNode(component.render());
+  Object.assign(component, {updater: updateComponent});
+
+  component.base = renderNode(component.render());
+
+  return component.base;
+}
+
+function updateComponent(component) {
+  const vNode = component.render();
+  const oldNode = component.base;
+
+  component.base = renderNode(vNode);
 }
 
 //support functions
@@ -43,3 +54,22 @@ if (typeof nodeName === 'string') {
     }
   })
 }
+
+export Component {
+
+  constructor(props) {
+    this.props = props;
+    this.state = null;
+  }
+
+  setState(partialState) {
+    Object.assign(this.state, partialState);
+    console.log(this.state);
+  }
+}
+
+function createElement(nodeName, props, ...children) {
+  return { nodeName, props, children};
+};
+
+export default {createElement};

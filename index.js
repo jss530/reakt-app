@@ -1,6 +1,6 @@
-import Reakt from './reakt';
-import {render} from './reaktDOM';
-import {App} from './app';
+import Reakt from './reakt.js';
+import {render} from './reaktDOM.js';
+import {App} from './app.js';
 
 // const Title = ({text}) =>
 //   Reakt.createElement(
@@ -22,10 +22,20 @@ import {App} from './app';
 //   )
 // };
 
-class List {
+class List extends Component {
 
   constructor(props) {
-    this.props = props
+    super(props);
+
+    this.state = { items: []};
+
+    setInterval(() => {
+      this.setState( items: [...this.state.items, "Pretzel"]);
+    }, 2000)
+  }
+
+  addItem() {
+    this.setState({ items: [...this.state.items, "Pretzel"] })
   }
 
   render() {
@@ -44,6 +54,6 @@ const App = () => {
 };
 
 ReaktDOM.render(
-  Reakt.createElement(App),
+  App(),
   document.getElementById('app')
 );
