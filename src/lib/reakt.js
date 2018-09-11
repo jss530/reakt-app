@@ -48,28 +48,48 @@ if (typeof nodeName === 'string') {
   }
 
   //handle children
-  children.forEach(child => {
-    if (typeof child === 'string') {
-      const textNode =
+  function handleChildren(children, element) {
+
+    (children || []).forEach(child => {
+      if (isString(child)) {
+        element.appendChild(document.createTextNode(child));
+      }
+      else {
+        element.appendChild(renderNode(child));
+      }
+    });
+  }
+
+  function handleProps(props, element) {
+    for (let propName in props) {
+      // support events
+      if (isEvent(propName)) {
+        const eventName = propName.substring(2).toLowerCase();
+        element.addEventListener(eventName, props[propName]);
+      }
+      // support DOM properties
+      else if (propName in element) {
+        element[propName] = props[propName];
+      }
+      // support custom attributes
+      else {
+        element.setAttribute(propName, props[propName]);
+      }
     }
-  })
-}
-
-export Component {
-
-  constructor(props) {
-    this.props = props;
-    this.state = null;
   }
 
-  setState(partialState) {
-    Object.assign(this.state, partialState);
-    console.log(this.state);
+
+  let currentApp;
+
+  function render(element, rootElement) {
+    const app = renderNode(element);
+
+    currentApp ?
+      rootElement.replaceChild(app, currentApp) :
+      rootElement.appendChild(app);
+
+    currentApp = app;
+
   }
-}
 
-function createElement(nodeName, props, ...children) {
-  return { nodeName, props, children};
-};
-
-export default {createElement};
+export default {render};
